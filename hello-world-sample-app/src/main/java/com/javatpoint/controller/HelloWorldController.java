@@ -8,5 +8,6 @@ public class HelloWorldController
 public String hello() 
 {
 return "Hello InfoServices";
+return "I have successfully launched a Sample App";
 }
 }
