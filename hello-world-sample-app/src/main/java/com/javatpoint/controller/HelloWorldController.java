@@ -7,7 +7,6 @@ public class HelloWorldController
 @RequestMapping("/")
 public String hello() 
 {
-return "Hello InfoServices";
-return "I have successfully launched a Sample App";
+return "Hello javaTpoint";
 }
 }
