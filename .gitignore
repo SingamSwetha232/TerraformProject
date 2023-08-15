@@ -1,5 +1,17 @@
-main.tfvars
+# Directories
 .terraform
+.tfstate*
+*.tfstate.backup
+
+# Files
+*.tfvars
+*.tfplan
+*.tfout
+terraform.tfstate*
+terraform.tfvars*
+.terraform.lock.hcl
+main.tfplan
+
 
 # Compiled class file
 *.class

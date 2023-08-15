@@ -73,6 +73,12 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
+resource "azurerm_user_assigned_identity" "vm_identity" {
+  resource_group_name = azurerm_resource_group.rsc_grp.name
+  location            = azurerm_resource_group.rsc_grp.location
+  name                = "vm-identity"
+}
+
 resource "azurerm_virtual_machine" "vm" {
   name                  = "helloworld-vm"
   location              = azurerm_resource_group.rsc_grp.location
@@ -102,6 +108,11 @@ resource "azurerm_virtual_machine" "vm" {
 
   os_profile_linux_config {
     disable_password_authentication = false
+  }
+
+  identity {
+    type = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.vm_identity.id]
   }
 
   provisioner "remote-exec" {
@@ -144,6 +155,14 @@ resource "random_string" "random_suffix" {
   special = false
   upper   = false
 }
+
+resource "azurerm_role_assignment" "vm_storage_access" {
+  principal_id   = azurerm_virtual_machine.vm.identity[0].principal_id
+  role_definition_name = "Storage Blob Data Contributor"
+  
+  scope = azurerm_storage_account.storage.id
+}
+
 
 resource "azurerm_private_dns_zone" "dns" {
   name                = "privatelink.blob.core.windows.net"
